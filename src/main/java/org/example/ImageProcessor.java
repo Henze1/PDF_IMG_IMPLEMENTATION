@@ -1,44 +1,31 @@
 package org.example;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class ImageProcessor {
-    public static void main(String[] args) {
-        // Specify the input and output file paths
-        String inputFile = "path/to/input_image.jpg";
-        String outputFile = "path/to/output_image.jpg";
+    public static BufferedImage overlaySignature(BufferedImage stampImage, String signature) {
+        // Create a Graphics2D object to perform the overlay
+        Graphics2D graphics = stampImage.createGraphics();
 
-        // Process the image
-        processImage(inputFile, outputFile);
-    }
+        // Set font properties for the signature
+        Font font = new Font("Arial", Font.BOLD, 30);
+        graphics.setFont(font);
+        graphics.setColor(Color.BLACK);
 
-    private static void processImage(String inputFilePath, String outputFilePath) {
-        try {
-            // Read the original image
-            BufferedImage originalImage = ImageIO.read(new File(inputFilePath));
+        // Calculate the position to center the signature on the stamp image
+        int x = (stampImage.getWidth() - graphics.getFontMetrics().stringWidth(signature)) / 2;
+        int y = stampImage.getHeight() / 2;
 
-            // Perform grayscale conversion
-            BufferedImage processedImage = convertToGrayscale(originalImage);
+        // Draw the signature onto the stamp image
+        graphics.drawString(signature, x, y);
 
-            // Save the processed image
-            ImageIO.write(processedImage, "jpg", new File(outputFilePath));
+        // Dispose of the Graphics2D object to free up resources
+        graphics.dispose();
 
-            System.out.println("Image processing completed. Processed image saved to: " + outputFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static BufferedImage convertToGrayscale(BufferedImage image) {
-        // Create a new BufferedImage for the grayscale image
-        BufferedImage grayscaleImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-
-        // Perform the grayscale conversion
-        grayscaleImage.getGraphics().drawImage(image, 0, 0, null);
-
-        return grayscaleImage;
+        return stampImage;
     }
 }
