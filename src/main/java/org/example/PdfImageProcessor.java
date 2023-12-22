@@ -2,33 +2,66 @@ package org.example;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
-public class PdfImageProcessor {
+public
+
+class PdfImageProcessor {
     public static void main(String[] args) {
-        // Get user input for signature and PDF file location
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter signature (2 or 3 characters): ");
-        String signature = scanner.nextLine();
+        String signature = getValidatedSignature(scanner);
+        String pdfFilePath = getValidatedPdfFilePath(scanner);
 
-        System.out.print("Enter PDF file location: ");
-        String pdfFilePath = scanner.nextLine();
-
-        // Load stamp image from resources
-        BufferedImage stampImage = null;
+        BufferedImage stampImage;
         try {
-            stampImage = ImageIO.read(PdfImageProcessor.class.getResourceAsStream("/stamp.png"));
+            stampImage = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/stamp.png")));
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error loading stamp image: " + e.getMessage());
+            return;
         }
 
-        // Overlay signature onto stamp image
+        if (stampImage == null) {
+            System.err.println("Stamp image not found. Please ensure it exists in the resources directory.");
+            return;
+        }
+
         BufferedImage stampedImage = ImageProcessor.overlaySignature(stampImage, signature);
 
-        // Add stamped image to the PDF
-        PdfProcessor.addStampToPdf(pdfFilePath, stampedImage);
+        try {
+            PdfProcessor.addStampToPdf(pdfFilePath, stampedImage);
+            System.out.println("PDF processing complete. Check the stamped PDF file.");
+        } catch (IOException e) {
+            System.err.println("Error processing PDF: " + e.getMessage());
+        }
+    }
 
-        System.out.println("PDF processing complete. Check the stamped PDF file.");
+    private static String getValidatedSignature(Scanner scanner) {
+        while (true) {
+            System.out.print("Enter signature (2 or 3 characters): ");
+            String signature = scanner.nextLine();
+
+            if (signature.length() >= 2 && signature.length() <= 3) {
+                return signature;
+            }
+
+            System.err.println("Invalid signature length. Please enter 2 or 3 characters.");
+        }
+    }
+
+    private static String getValidatedPdfFilePath(Scanner scanner) {
+        while (true) {
+            System.out.print("Enter PDF file location: ");
+            String pdfFilePath = scanner.nextLine();
+
+            File file = new File(pdfFilePath);
+            if (file.exists() && file.isFile() && pdfFilePath.endsWith(".pdf")) {
+                return pdfFilePath;
+            }
+
+            System.err.println("Invalid PDF file path. Please ensure the file exists and has a .pdf extension.");
+        }
     }
 }
