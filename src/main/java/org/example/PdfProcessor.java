@@ -13,29 +13,29 @@ import java.io.IOException;
 
 public class PdfProcessor {
     public static void addStampToPdf(String pdfFilePath, BufferedImage stampedImage) throws IOException {
-        PDDocument document = PDDocument.load(new File(pdfFilePath));
-        for (PDPage page : document.getPages()) {
-            PDImageXObject imageXObject;
+        try (PDDocument document = PDDocument.load(new File(pdfFilePath))) {
+            for (PDPage page : document.getPages()) {
+                PDImageXObject imageXObject;
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true)) {
-                float x = 10;
-                float y = 10;
+                try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
+                     ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
-                // Convert BufferedImage to byte array
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(stampedImage, "png", baos);
-                byte[] imageBytes = baos.toByteArray();
+                    float x = 10;
+                    float y = 10;
 
-                imageXObject = PDImageXObject.createFromByteArray(document, imageBytes, "stampedImage");
+                    // Convert BufferedImage to byte array
+                    ImageIO.write(stampedImage, "png", baos);
+                    byte[] imageBytes = baos.toByteArray();
 
-                contentStream.drawImage(imageXObject, x, y);
+                    imageXObject = PDImageXObject.createFromByteArray(document, imageBytes, "stampedImage");
+
+                    contentStream.drawImage(imageXObject, x, y);
+                }
             }
 
+            String fileNameWithoutExtension = pdfFilePath.replaceFirst("[.][^.]+$", "");
+            String stampedPdfFilePath = fileNameWithoutExtension + "_stamped.pdf";
+            document.save(new File(stampedPdfFilePath));
         }
-
-        String fileNameWithoutExtension = pdfFilePath.replaceFirst("[.][^.]+$", "");
-        String stampedPdfFilePath = fileNameWithoutExtension + "_stamped.pdf";
-        document.save(new File(stampedPdfFilePath));
-        document.close();
     }
 }

@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
-public
-
-class PdfImageProcessor {
+public class PdfImageProcessor {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String signature = getValidatedSignature(scanner);
@@ -17,14 +15,9 @@ class PdfImageProcessor {
 
         BufferedImage stampImage;
         try {
-            stampImage = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/stamp.png")));
+            stampImage = loadImage();
         } catch (IOException e) {
             System.err.println("Error loading stamp image: " + e.getMessage());
-            return;
-        }
-
-        if (stampImage == null) {
-            System.err.println("Stamp image not found. Please ensure it exists in the resources directory.");
             return;
         }
 
@@ -36,6 +29,14 @@ class PdfImageProcessor {
         } catch (IOException e) {
             System.err.println("Error processing PDF: " + e.getMessage());
         }
+    }
+
+    private static BufferedImage loadImage() throws IOException {
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/stamp.jpeg")));
+        if (image == null) {
+            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/stamp.jpeg");
+        }
+        return image;
     }
 
     private static String getValidatedSignature(Scanner scanner) {
