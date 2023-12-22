@@ -23,7 +23,6 @@ public class PdfProcessor {
                     float x = 10;
                     float y = 10;
 
-                    // Convert BufferedImage to byte array
                     ImageIO.write(stampedImage, "png", baos);
                     byte[] imageBytes = baos.toByteArray();
 

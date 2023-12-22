@@ -32,9 +32,9 @@ public class PdfImageProcessor {
     }
 
     private static BufferedImage loadImage() throws IOException {
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/stamp.jpeg")));
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/stamp.jpeg")));
         if (image == null) {
-            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/stamp.jpeg");
+            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/stamp.jpeg");
         }
         return image;
     }
