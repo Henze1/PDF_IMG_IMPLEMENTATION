@@ -36,7 +36,7 @@ public class PdfImageProcessor {
     private static BufferedImage loadImage() throws IOException {
         BufferedImage image = ImageIO.read(new File(Objects.requireNonNull(PdfImageProcessor.class.getClassLoader().getResource("img/png-clipart-postmark-stamp-seal-postmark-stamp-seal-thumbnail.png")).getPath()));
         if (image == null) {
-            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/png-clipart-postmark-stamp-seal-postmark-stamp-seal-thumbnail.png");
+            throw new IOException("Failed to load image from: " + "img/png-clipart-postmark-stamp-seal-postmark-stamp-seal-thumbnail.png");
         }
         return image;
     }

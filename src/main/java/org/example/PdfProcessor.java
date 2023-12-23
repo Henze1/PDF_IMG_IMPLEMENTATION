@@ -20,8 +20,8 @@ public class PdfProcessor {
                 try (PDPageContentStream contentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, true);
                      ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
-                    float x = 10;
-                    float y = 10;
+                    float x = 100;
+                    float y = 2800;
 
                     ImageIO.write(stampedImage, "png", baos);
                     byte[] imageBytes = baos.toByteArray();
