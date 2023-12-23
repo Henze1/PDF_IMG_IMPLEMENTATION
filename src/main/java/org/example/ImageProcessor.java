@@ -1,10 +1,12 @@
 package org.example;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ImageProcessor {
-    public static BufferedImage overlaySignature(BufferedImage stampImage, String signature) {
+    public static BufferedImage overlaySignature(@NotNull BufferedImage stampImage, String signature) {
         Graphics2D graphics = stampImage.createGraphics();
 
         Font font = new Font("Arial", Font.BOLD, 30);

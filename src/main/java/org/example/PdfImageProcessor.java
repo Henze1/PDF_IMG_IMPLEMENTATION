@@ -16,6 +16,8 @@ public class PdfImageProcessor {
         BufferedImage stampImage;
         try {
             stampImage = loadImage();
+
+
         } catch (IOException e) {
             System.err.println("Error loading stamp image: " + e.getMessage());
             return;
@@ -32,9 +34,9 @@ public class PdfImageProcessor {
     }
 
     private static BufferedImage loadImage() throws IOException {
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(PdfImageProcessor.class.getResourceAsStream("/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/stamp.jpeg")));
+        BufferedImage image = ImageIO.read(new File(Objects.requireNonNull(PdfImageProcessor.class.getClassLoader().getResource("img/png-clipart-postmark-stamp-seal-postmark-stamp-seal-thumbnail.png")).getPath()));
         if (image == null) {
-            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/stamp.jpeg");
+            throw new IOException("Failed to load image from: " + "/home/henzel/Documents/textdocs/IntellIJProjects/PDF_IMG_IMPLEMENTATION/src/main/java/org/example/png-clipart-postmark-stamp-seal-postmark-stamp-seal-thumbnail.png");
         }
         return image;
     }
